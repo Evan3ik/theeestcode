@@ -1,9 +1,44 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Gramby's Auditorium</title>
+<title>valve software</title>
 <script>
-const noteNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+
+
+function cipherRot12(str) {
+    
+    var alphabets =['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'," ", "-", "_", ".", "&","?", "!", "@", "#", "/", "=", 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+    
+    var alphabets12 = ['M', 'N','O','P','Q','R','S','T','U','V','W','X','Y','Z','A','B','C','D','E','F','G','H','I','J','K','L', " ", "-", "_", ".", "&","?", "!", "@", "#", "/", "=", 'm','n','o','p','q','r','s','t','u','v','w','x','y','z','a','b','c','d','e','f','g','h','i','j','k','l'];
+    
+    var resultStr = [];
+    for(let i=0; i<str.length; i++){
+        for(let j =0; j<alphabets.length; j++){
+            if(str[i] === alphabets[j]){
+                     resultStr.push(alphabets12[j])
+            }
+        }
+    }
+    return resultStr.join("");
+  };
+
+
+function cipherRotm12(str) {
+    
+    var alphabets12 =['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'," ", "-", "_", ".", "&","?", "!", "@", "#", "/", "=", 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+    
+    var alphabets = ['M', 'N','O','P','Q','R','S','T','U','V','W','X','Y','Z','A','B','C','D','E','F','G','H','I','J','K','L', " ", "-", "_", ".", "&","?", "!", "@", "#", "/", "=", 'm','n','o','p','q','r','s','t','u','v','w','x','y','z','a','b','c','d','e','f','g','h','i','j','k','l'];
+    
+    var resultStr = [];
+    for(let i=0; i<str.length; i++){
+        for(let j =0; j<alphabets.length; j++){
+            if(str[i] === alphabets[j]){
+            resultStr.push(alphabets12[j]);
+            } 
+        }
+    }
+    return resultStr.join("");
+  };
 
 
 
@@ -11,23 +46,32 @@ document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById("inputform");
     const input = document.getElementById("input");
     const output = document.getElementById("output");
-    const pianomap = document.getElementById("pianomap");
-    const outType = document.getElementById("outputType");
+    const outType = document.getElementById("code");
     form.addEventListener("submit", function(e) {
-        const map = maps[pianomap.value];
         const oT = outType.value
-        var photoCode = convert(map, input.value.split('')).join('');
-        if (oT == "photo") {
-                photoCode = '[["PolaroidPhoto",[],{"Phrase":"' + convert(map, input.value.split('')).join('') + '"}]]';
-                photoCode = btoa(photoCode)
+        if (oT == "encode") {
+            var binary = ""
+              for (var i = 0; i < input.value.length; i++) {
+                  binary += input.value[i].charCodeAt(0).toString(2) + " ";
+              }
+              binary = btoa(binary)
+              binary = cipherRot12(binary)
+              output.value = binary
+              
         }
-        try {
-            output.value = photoCode;
-        } catch(e) {
-            output.value = `Error while converting! ${e}\n\nDoes your song span too many octaves?`;
+        if (oT == "decode") {
+            var binary = input.value
+            binary = cipherRotm12(binary)
+            binary = atob(binary)
+            var binString = '';
+    
+            binary.split(' ').map(function(bin) {
+                binString += String.fromCharCode(parseInt(bin, 2));
+            });
+            binString = binString.substring(0, binString.length - 1)
+            output.value = binString
         }
         e.preventDefault();
-        
     });
 });
 </script>
@@ -91,18 +135,16 @@ textarea {
         </form>
         </div>
     </div>
-</div>
 <div id="outcontainer">
     <div id="outflexcontainer">
         <form id="outinputform">
             <br>
             <label for="input" style="color:White">Output:</label>
             <br>
-            <textarea spellcheck="false" name="input" id="input" required></textarea>
+            <textarea spellcheck="false" name="output" id="output" required></textarea>
             <br>
         </form>
         </div>
     </div>
-</div>
 </body>
 </html>
