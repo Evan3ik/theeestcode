@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (oT == "encode") {
             var binary = ""
               for (var i = 0; i < input.value.length; i++) {
-                  binary += input.value[i].charCodeAt(0).toString(2) + " ";
+                  binary += "0" + input.value[i].charCodeAt(0).toString(2) + " ";
               }
               binary = btoa(binary)
               binary = cipherRot12(binary)
@@ -64,7 +64,6 @@ document.addEventListener("DOMContentLoaded", function() {
             binary = cipherRotm12(binary)
             binary = atob(binary)
             var binString = '';
-    
             binary.split(' ').map(function(bin) {
                 binString += String.fromCharCode(parseInt(bin, 2));
             });
