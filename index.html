@@ -2,9 +2,22 @@
 <head>
 <meta charset="utf-8">
 <title>valve software</title>
+<script src="require.js"></script>
 <script>
-
-
+getBg()
+async function getBg() {
+const images = ["albania", "estonia", "estonia wallpaper", "problem sleuth on mspaint adventures", "hacker", "baltics", "latvia", "germany", "russia"]
+   const fetch = require("node-fetch").default;
+     const response = await fetch('https://duckduckgo.com/?t=ffab&q=' + images[Math.floor(Math.random() * images.length)] + '&iax=images&ia=images');
+  const body = await response.text();
+    var imgLink = body.split('"URL":"/i/').pop()
+   imgLink = imgLink.toString()
+  var ding = imgLink.substring(0, 12)
+    var dingo = article[2]
+  dingo = "https://external-content.duckduckgo.com/i/" + ding
+  console.log(dingo)
+  document.getElementsByClassName('mainview')[0].style.backgroundImage = 'url(' + dingo + ')';
+}
 function cipherRot12(str) {
     
     var alphabets =['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'," ", "-", "_", ".", "&","?", "!", "@", "#", "/", "=", 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
@@ -84,20 +97,40 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 <style>
-body {
-    background: #020D39;
+#mainview {
+    background: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fwk-aW3yyEcc%2Fmaxresdefault.jpg&f=1&nofb=1&ipt=c1a136a662b3e93280b1da1b72d2c8df818789bb972a5b75d1ec81f139ba7b3e&ipo=images');
+    background-repeat: no-repeat;
+    background-size: 2000px 1000px;
+    position: center;
     color: black;
-    font-family: sans-serif;
+    font-family: quicksand;
+}
+.footer-content-right {
+  padding-right:40px;
+  margin-top:20px;
+  float:right;
 }
 
+.icon-style {
+  height:40px;
+  margin-left:20px;
+  margin-top:5px;
+}
+
+.icon-style:hover {
+  background-color:yellow;
+  padding:5px;
+}
 code {
-    background: lightgrey;
+    background: rgb(165, 172, 165);
     padding: 2px;
     border-radius: 5px;
     color: black;
 }
 
-
+label {
+    color: #ffffff;
+}
 #container, #outcontainer {
     background: #4A4A4A;
     text-align: center;
@@ -119,16 +152,25 @@ code {
 textarea {
     width: 320px;
     height: 160px;
+    border-radius: 8px;
 }
+input {
+    background-color: #21c1e9;
+    width: 250px;
+    height: 40px;
+    border-radius: 16px;
+}
+
+
 </style>
 </head>
-<body>
+<body id="mainview">
 <div id="container">
     <div id="flexcontainer">
-        
+            
         <form id="inputform">
             <br>
-            
+                
             <label for="code">Type:</label>
             <select name="code" id="code">
                 <option value="encode">Encode</option>
@@ -154,5 +196,10 @@ textarea {
         </form>
         </div>
     </div>
+<div class="footer-content-right">
+    <a href="https://github.com/Evan3ik" target="_blank"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" class="icon-style" alt="Github icon"></a>
+    <a href="https://youtu.be/jTb8jGbB4PA" target="_blank"><img src="https://icolink.com/media/com_easysocial/avatars/users/12119/76cf547044608dd6665637f43872d169_square.webp"  class="icon-style" alt="Floppa icon"></a>
+    <a href="https://youtu.be/5g9DkQIjRSU" target="_blank"><img src="https://vectorflags.s3.amazonaws.com/flags/al-square-01.png" class="icon-style" alt="Albania icon"></a>
+</div>
 </body>
 </html>
