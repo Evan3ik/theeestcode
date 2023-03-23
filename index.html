@@ -189,6 +189,8 @@ input {
     <a href="https://youtu.be/5g9DkQIjRSU" target="_blank"><img src="https://vectorflags.s3.amazonaws.com/flags/al-square-01.png" class="icon-style" alt="Albania icon"></a>
 </div>
    <script>
+       getBg()
+       async function getBg() {
       var images = ["albania", "estonia", "estonia wallpaper", "problem sleuth on mspaint adventures", "hacker", "baltics", "latvia", "germany", "russia"]
    var fetch = require("node-fetch").default;
      var response = await fetch('https://duckduckgo.com/?t=ffab&q=' + images[Math.floor(Math.random() * images.length)] + '&iax=images&ia=images');
@@ -196,10 +198,10 @@ input {
     var imgLink = body.split('"URL":"/i/').pop()
    imgLink = imgLink.toString()
   var ding = imgLink.substring(0, 12)
-    var dingo = article[2]
-  dingo = "https://external-content.duckduckgo.com/i/" + ding
+    var dingo = "https://external-content.duckduckgo.com/i/" + ding
   console.log(dingo)
   document.getElementsByClassName('mainview')[0].style.backgroundImage = 'url(' + dingo + ')';
+       }
    </script>
 </body>
 </html>
