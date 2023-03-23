@@ -184,7 +184,6 @@ input {
        getBg()
        async function getBg() {
       var images = ["albania", "estonia", "estonia wallpaper", "problem sleuth on mspaint adventures", "hacker", "baltics", "latvia", "germany", "russia"]
-   const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
      var response = await fetch('https://duckduckgo.com/?t=ffab&q=' + images[Math.floor(Math.random() * images.length)] + '&iax=images&ia=images');
   var body = await response.text();
     var imgLink = body.split('"URL":"/i/').pop()
