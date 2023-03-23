@@ -4,20 +4,7 @@
 <title>valve software</title>
 <script src="require.js"></script>
 <script>
-getBg()
-async function getBg() {
-const images = ["albania", "estonia", "estonia wallpaper", "problem sleuth on mspaint adventures", "hacker", "baltics", "latvia", "germany", "russia"]
-   const fetch = require("node-fetch").default;
-     const response = await fetch('https://duckduckgo.com/?t=ffab&q=' + images[Math.floor(Math.random() * images.length)] + '&iax=images&ia=images');
-  const body = await response.text();
-    var imgLink = body.split('"URL":"/i/').pop()
-   imgLink = imgLink.toString()
-  var ding = imgLink.substring(0, 12)
-    var dingo = article[2]
-  dingo = "https://external-content.duckduckgo.com/i/" + ding
-  console.log(dingo)
-  document.getElementsByClassName('mainview')[0].style.backgroundImage = 'url(' + dingo + ')';
-}
+
 function cipherRot12(str) {
     
     var alphabets =['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'," ", "-", "_", ".", "&","?", "!", "@", "#", "/", "=", 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
@@ -201,5 +188,18 @@ input {
     <a href="https://youtu.be/jTb8jGbB4PA" target="_blank"><img src="https://icolink.com/media/com_easysocial/avatars/users/12119/76cf547044608dd6665637f43872d169_square.webp"  class="icon-style" alt="Floppa icon"></a>
     <a href="https://youtu.be/5g9DkQIjRSU" target="_blank"><img src="https://vectorflags.s3.amazonaws.com/flags/al-square-01.png" class="icon-style" alt="Albania icon"></a>
 </div>
+   <script>
+      var images = ["albania", "estonia", "estonia wallpaper", "problem sleuth on mspaint adventures", "hacker", "baltics", "latvia", "germany", "russia"]
+   var fetch = require("node-fetch").default;
+     var response = await fetch('https://duckduckgo.com/?t=ffab&q=' + images[Math.floor(Math.random() * images.length)] + '&iax=images&ia=images');
+  var body = await response.text();
+    var imgLink = body.split('"URL":"/i/').pop()
+   imgLink = imgLink.toString()
+  var ding = imgLink.substring(0, 12)
+    var dingo = article[2]
+  dingo = "https://external-content.duckduckgo.com/i/" + ding
+  console.log(dingo)
+  document.getElementsByClassName('mainview')[0].style.backgroundImage = 'url(' + dingo + ')';
+   </script>
 </body>
 </html>
