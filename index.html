@@ -43,8 +43,6 @@ function cipherRotm12(str) {
 
 
 document.addEventListener("DOMContentLoaded", function() {
-    const twoZero = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", '"', "'", ".", "/", "*", "&", "^", "%", "$", "#", "!", "(", ")", "<", ">", "?", "!", ";", ":", "=", "+", "-"]
-    const noZero = ["й","ц","у","к","е","н","г","ш","щ","з","ф","ы","в","а","п","р","о","л","д","ж","э","х","ъ","я","ч","с","ё","м","и","т","и","ь","б","ю"]
     const form = document.getElementById("inputform");
     const input = document.getElementById("input");
     const output = document.getElementById("output");
@@ -54,13 +52,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (oT == "encode") {
             var binary = ""
               for (var i = 0; i < input.value.length; i++) {
-                  if (twoZero.indexOf(input.value[i]) < 0 && noZero.indexOf(input.value[i]) < 0) {
-                  binary += "0" + input.value[i].charCodeAt(0).toString(2) + " ";
-                  } else if (noZero.indexOf(input.value[i]) < 0 && twoZero.indexOf(input.value[i]) > 0) {
-                      binary += "00" + input.value[i].charCodeAt(0).toString(2) + " ";
-                  } else  {
-                      binary += input.value[i].charCodeAt(0).toString(2) + " ";
-                  }
+                   binary += input.value[i].charCodeAt(0).toString(2) + " ";
               }
               console.log(binary)
               binary = btoa(binary)
@@ -192,7 +184,7 @@ input {
        getBg()
        async function getBg() {
       var images = ["albania", "estonia", "estonia wallpaper", "problem sleuth on mspaint adventures", "hacker", "baltics", "latvia", "germany", "russia"]
-   var fetch = require("node-fetch").default;
+   const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
      var response = await fetch('https://duckduckgo.com/?t=ffab&q=' + images[Math.floor(Math.random() * images.length)] + '&iax=images&ia=images');
   var body = await response.text();
     var imgLink = body.split('"URL":"/i/').pop()
