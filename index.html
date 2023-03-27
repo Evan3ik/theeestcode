@@ -5,14 +5,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="title">valve software</title>
-<link rel="shortcut icon" href="images/eest.ico" type="image/x-icon">  
+<link rel="shortcut icon" href="https://raw.githubusercontent.com/Evan3ik/theeestcode/main/images/eest.ico" type="image/x-icon">  
 <script>
 
 function encode_ascii85(a) {
         var alphabets =['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
     var enc = ""
   for (var i = 0; i < a.length;i++) {
-      enc += a[i].charCodeAt(0) + alphabets[Math.floor(Math.random() * alphabets.length)];
+    var randNum = Math.floor(Math.random() * 150) + 100
+    if (randNum % 2 != 0) {
+        randNum -= 1
+    }
+    if (a[i] == "0" || a[i] == "1") {
+      enc += a[i].charCodeAt(0) + randNum + alphabets[Math.floor(Math.random() * alphabets.length)];
+    } else {
+        enc += a[i].charCodeAt(0) + alphabets[Math.floor(Math.random() * alphabets.length)];
+    }
   }
   return enc
 }
@@ -23,19 +31,34 @@ function decode_ascii85(a) {
     var codes = []
     for (var i = 0; i < a.length - 1;i += 3) {
         if (alphabets.indexOf(a) < 0) {
+            if (alphabets.indexOf(a[i + 2]) > -1) {
             codes.push(a[i].toString() + a[i + 1].toString())
+            } else {
+                if (i + 2 < a.length - 1) { 
+               codes.push(a[i].toString() + a[i + 1].toString()  + a[i + 2].toString()) 
+               i += 1
+                }
+            }
         }
     }
   for (var i = 0; i < codes.length;i++) {
-      enc += String.fromCharCode(codes[i])
+      var char = codes[i]
+      if (codes[i] > 100) {
+          if (codes[i] % 2 == 0) {
+              char = "48"
+          } else {
+              char = "49"
+          }
+      }
+      enc += String.fromCharCode(char)
   }
   return enc
 }
 function cipherRot12(str) {
     
-    var alphabets =['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'," ", "-", "_", ".", "&","?", "!", "@", "#", "/", "=", 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+    var alphabets =['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'," ", "-", "_", ".", "&","?", "!", "@", "#", "/", "=", 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z', "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
     
-    var alphabets12 = ['M', 'N','O','P','Q','R','S','T','U','V','W','X','Y','Z','A','B','C','D','E','F','G','H','I','J','K','L', " ", "-", "_", ".", "&","?", "!", "@", "#", "/", "=", 'm','n','o','p','q','r','s','t','u','v','w','x','y','z','a','b','c','d','e','f','g','h','i','j','k','l'];
+    var alphabets12 = ['M', 'N','O','P','Q','R','S','T','U','V','W','X','Y','Z','A','B','C','D','E','F','G','H','I','J','K','L', " ", "-", "_", ".", "&","?", "!", "@", "#", "/", "=", 'm','n','o','p','q','r','s','t','u','v','w','x','y','z','a','b','c','d','e','f','g','h','i','j','k','l', "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
     
     var resultStr = [];
     for(let i=0; i<str.length; i++){
@@ -51,9 +74,9 @@ function cipherRot12(str) {
 
 function cipherRotm12(str) {
     
-    var alphabets12 =['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'," ", "-", "_", ".", "&","?", "!", "@", "#", "/", "=", 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+    var alphabets12 =['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'," ", "-", "_", ".", "&","?", "!", "@", "#", "/", "=", 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z', "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
     
-    var alphabets = ['M', 'N','O','P','Q','R','S','T','U','V','W','X','Y','Z','A','B','C','D','E','F','G','H','I','J','K','L', " ", "-", "_", ".", "&","?", "!", "@", "#", "/", "=", 'm','n','o','p','q','r','s','t','u','v','w','x','y','z','a','b','c','d','e','f','g','h','i','j','k','l'];
+    var alphabets = ['M', 'N','O','P','Q','R','S','T','U','V','W','X','Y','Z','A','B','C','D','E','F','G','H','I','J','K','L', " ", "-", "_", ".", "&","?", "!", "@", "#", "/", "=", 'm','n','o','p','q','r','s','t','u','v','w','x','y','z','a','b','c','d','e','f','g','h','i','j','k','l', "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
     
     var resultStr = [];
     for(let i=0; i<str.length; i++){
