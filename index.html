@@ -96,6 +96,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const input = document.getElementById("input");
     const output = document.getElementById("output");
     const outType = document.getElementById("code");
+    const time = document.getElementById("times");
+
     form.addEventListener("submit", function(e) {
         const oT = outType.value
             var alphabets =['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z', "-", "_", ".", "&","?", "!", "@", "#", "/", "="];
@@ -105,6 +107,24 @@ document.addEventListener("DOMContentLoaded", function() {
                    binary += input.value[i].charCodeAt(0).toString(2) + alphabets[Math.floor(Math.random() * alphabets.length)];
               }
               binary = encode_ascii85(binary)
+              if (time.value != "time_inf") {
+                  var date = Date.now()
+                  switch(time.value) {
+                      case "time_1d":
+                          date += 86400000
+                          binary += "¤" + date
+                          break;
+                    case "time_1h":
+                          date += 3600000
+                          binary += "¤" + date
+                          break;
+                    case "time_30m":
+                          date += 1800000
+                          binary += "¤" + date
+                          break;
+                    
+                  }
+              }
               binary = alphabets[Math.floor(Math.random() * alphabets.length)] + btoa(binary) + "="
               binary = cipherRot12(binary)
               output.value = binary
@@ -116,22 +136,31 @@ document.addEventListener("DOMContentLoaded", function() {
             binary = binary.substring(0, binary.length - 1)
             binary = cipherRotm12(binary)
             binary = atob(binary)
-            binary = decode_ascii85(binary)
-            var bin2 = ""
-            for (var i = 0; i < binary.length; i++) {
-                if (alphabets.indexOf(binary[i]) > -1) {
-                    bin2 += " "
-                    continue;
+            if (binary.indexOf("¤") > 0) {
+                var timed = binary.split("¤")[1]
+                timed = parseInt(timed)
+                if (Date.now() > timed) {
+                    output.value = "Expired code!"
                 }
-                bin2 += binary[i]
             }
-            binary = bin2
-            var binString = '';
-            binary.split(' ').map(function(bin) {
-                binString += String.fromCharCode(parseInt(bin, 2));
-            });
-            binString = binString.substring(0, binString.length - 1)
-            output.value = binString
+            if (output.value != "Expired code!") {
+                binary = decode_ascii85(binary)
+                var bin2 = ""
+                for (var i = 0; i < binary.length; i++) {
+                    if (alphabets.indexOf(binary[i]) > -1) {
+                        bin2 += " "
+                        continue;
+                    }
+                    bin2 += binary[i]
+                }
+                binary = bin2
+                var binString = '';
+                binary.split(' ').map(function(bin) {
+                    binString += String.fromCharCode(parseInt(bin, 2));
+                });
+                binString = binString.substring(0, binString.length - 1)
+                output.value = binString
+            }
         }
         e.preventDefault();
     });
@@ -143,6 +172,14 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     outType.addEventListener("change", function(e) {
         input.value = ""
+        if (outType.value == "decode") {
+                document.getElementById("timelimit").style.display = "none";
+                document.getElementById("times").style.display = "none";
+        } else {
+                 document.getElementById("times").style.display = "block";
+                document.getElementById("timelimit").style.display = "block";
+                
+        }
     });
 });
     </script>
@@ -229,6 +266,7 @@ input {
 
 
 
+
 </style>
 </head>
 <body id="mainview">
@@ -243,6 +281,16 @@ input {
                 <option value="encode">Encode</option>
                 <option value="decode">Decode</option>
             </select>
+            <br>
+            <label for="timelimit" id="timelimit">Expires:</label> 
+            <center>
+              <select style="text-align:center;" name="times" id="times">
+                <option value="time_inf">Never</option>
+                <option value="time_1d">1 Day</option>
+                <option value="time_1h">1 Hour</option>
+                <option value="time_30m">30 Minutes</option>
+            </select>
+            </center>
             <br>
             <label for="input" style="color:White">Text:</label>
             <br>
@@ -275,10 +323,10 @@ input {
    <script>
        getBg()
        async function getBg() {
-      var images = ["https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fwk-aW3yyEcc%2Fmaxresdefault.jpg&f=1&nofb=1&ipt=c1a136a662b3e93280b1da1b72d2c8df818789bb972a5b75d1ec81f139ba7b3e&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.2xRMSFW9BMWqsdWyrwLCPwHaEK%26pid%3DApi&f=1&ipt=8a3a9daa18e955e1f791c643ddca5b553a7087f678976d9fe69c4d82d0a01493&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.ObB1V3CsG_z1Og5kYsI13AHaEK%26pid%3DApi&f=1&ipt=a8138e35c467ff8a63f231ac660640569e244f974672969e4cddc4b315661296&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.OYlqW6j8Wmr9gJkOhzu43AHaE8%26pid%3DApi&f=1&ipt=43687d60566783e4d0259eff342e006aa03100c9453485aed903bfd7b62f48ae&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.9v4ojd1_UhPvk72JUe97rAHaE8%26pid%3DApi&f=1&ipt=f17813e48fb7f52112ffc71296453ae8076212174390a7ad873735a9d5fc096e&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.yf4Is5-Xq3MRy-v6UuiDfgHaFI%26pid%3DApi&f=1&ipt=69b4ac5aa6d21df59ae3790b4b49f4be87d05ccfd6bdf81f7d9ec0ae7543cf96&ipo=images", "https://github.com/Evan3ik/theeestcode/blob/main/images/Capture.PNG?raw=true", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.RF9vZzQawOsSwZuu14SVsAHaE7%26pid%3DApi&f=1&ipt=250e4e85177eb1cfc769d3412c14bb553c012ba2f75408f758aa77c6fad33de1&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MAfTNDWRNazInSPXnoDbkwHaE8%26pid%3DApi&f=1&ipt=f7ab00687f96b1bf0d773164ba6b8099abf3d19ee384b5adead1be57b8da7bb6&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.AI0WOgR-dv2MWMIaJYQKTAHaEK%26pid%3DApi&f=1&ipt=f3c799c7e62fa09078ff6fbfcf199df298aacb479c7c92790e99fad22fefea39&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.-ips3-QLJzfbUTNurI-mIgHaGl%26pid%3DApi&f=1&ipt=4b7fec142f818b3cdce176d3d818552088a59b63274692520eb7e4ebced3f16b&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.aunfExJ_dMdEnbwg4t1uKAHaEp%26pid%3DApi&f=1&ipt=08550f0cc7c735c219fa7053d2c0337fc29b5205f149439aaf86b9a745763e1d&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.cunard.com%2Fcontent%2Fdam%2Fcunard%2Fmarketing-assets%2Fdestinations%2FTallin-750x563.jpg.image.1008.754.low.jpg&f=1&nofb=1&ipt=b0751bfbdd187b5be5999fc4566a9762d26ae8c11839360c04445e9f1dd40e91&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.2o4Yop0aCJFT2QxmIXRluAAAAA%26pid%3DApi&f=1&ipt=c57801fe217bde7b7ef41a543d7784cd630d587fa1117820ef2be1748077fba6&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.e0_vBylhy0bGJm_mlJflTAHaDp%26pid%3DApi&f=1&ipt=f21edb52c082f242dfba6b3dcffa0d46bd38a387b9ff438f235a8d5b5131f00d&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.QrqIj2TsaK8bHFiBjSxrfAHaDt%26pid%3DApi&f=1&ipt=2779fcfd5246f89d191ac3d5319984c4b248c5be9f22a12272650e800ea2ee89&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.explicit.bing.net%2Fth%3Fid%3DOIP.uj81mwITrs4pzvgjCgS5lwHaEM%26pid%3DApi&f=1&ipt=eecffcdae5d64f710baa601108c4d90c3cb5e8bf993dd5c8856f2a606c591cbc&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.xLPg3rxjI9I3lU-0HWGciAHaEK%26pid%3DApi&f=1&ipt=cdf04d4c6acb8b07d20272cb955344c797e46e88735186d7a85ec7480ed1d9d2&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.-xdlXIs3eA3IHgHYbf4nIAHaEK%26pid%3DApi&f=1&ipt=c24810de59699e7e4c05c3dfe8fc59f7cf8113b07d1b3da5cb6f378cb414f4f8&ipo=images", "https://cdn.discordapp.com/attachments/962647856177639424/1088829638983295046/nvmnd3-2782879698.jpg", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.XE384CDS-RjxBtNSev0-mgHaHa%26pid%3DApi&f=1&ipt=964bff6f2b240a86497c3e36878b29a71d57441154d81decf7563e777fd06004&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpreview.redd.it%2F24z21cp6x2751.png%3Fauto%3Dwebp%26s%3D61d5c3a266bc71e6aca081a06bc4c624711e16b7&f=1&nofb=1&ipt=6cf160f5b5e7277fb7070684a863c580a3292cf4f8d5737a637a504a71220c25&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.LUV5cRxLOOUbvY_OAfxEnwHaG-%26pid%3DApi&f=1&ipt=776b1bd555c8f5120a6b84acccdd5ccedc7f0a6e206ab9a537db8fc4f2d8d0db&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.explicit.bing.net%2Fth%3Fid%3DOIP.fB180_I3VVK5AXp_oDPivgHaE8%26pid%3DApi&f=1&ipt=f6af73aa6842f6a59fe688150291c25046a2d08fa3ec09646f73cb7db41411f5&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.BkeqOJem6cD1XOpOyDWtQAAAAA%26pid%3DApi&f=1&ipt=0a660d9e23a54dac937a8c7af76d296e830fa4a75c3968f38b17406c5c0ecb68&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.9u1pvBqHsQ6Vl9si77BdZQHaHa%26pid%3DApi&f=1&ipt=dd14d1a9ce501f495dac1e3c8ec8f60aa5ffd58545c898328fb705f567d84747&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.y3Z_65DjLwag-9OyrAecQwHaHa%26pid%3DApi&f=1&ipt=fc43bfd7460f4cbed3687fcc2cae051126f0deed941bab3eaf0857f2e761d28b&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.3dHGQWp0pknsu8vV8yMKsAHaKW%26pid%3DApi&f=1&ipt=8f0e39c5f1184d7d38c2043847fe05416006f9ee27b5e46b51e14e4698fa88fa&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.WEfoOPcY8Spq6Jm7JaLSGQHaE8%26pid%3DApi&f=1&ipt=8920caa9199adb83dca7dadc3fba38df2c7a64d24dedfb5d08a5a92a7e3a5d0c&ipo=images"]
+      var images = ["https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fwk-aW3yyEcc%2Fmaxresdefault.jpg&f=1&nofb=1&ipt=c1a136a662b3e93280b1da1b72d2c8df818789bb972a5b75d1ec81f139ba7b3e&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.2xRMSFW9BMWqsdWyrwLCPwHaEK%26pid%3DApi&f=1&ipt=8a3a9daa18e955e1f791c643ddca5b553a7087f678976d9fe69c4d82d0a01493&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.ObB1V3CsG_z1Og5kYsI13AHaEK%26pid%3DApi&f=1&ipt=a8138e35c467ff8a63f231ac660640569e244f974672969e4cddc4b315661296&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.OYlqW6j8Wmr9gJkOhzu43AHaE8%26pid%3DApi&f=1&ipt=43687d60566783e4d0259eff342e006aa03100c9453485aed903bfd7b62f48ae&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.9v4ojd1_UhPvk72JUe97rAHaE8%26pid%3DApi&f=1&ipt=f17813e48fb7f52112ffc71296453ae8076212174390a7ad873735a9d5fc096e&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.yf4Is5-Xq3MRy-v6UuiDfgHaFI%26pid%3DApi&f=1&ipt=69b4ac5aa6d21df59ae3790b4b49f4be87d05ccfd6bdf81f7d9ec0ae7543cf96&ipo=images", "https://github.com/Evan3ik/theeestcode/blob/main/images/Capture.PNG?raw=true", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.RF9vZzQawOsSwZuu14SVsAHaE7%26pid%3DApi&f=1&ipt=250e4e85177eb1cfc769d3412c14bb553c012ba2f75408f758aa77c6fad33de1&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.MAfTNDWRNazInSPXnoDbkwHaE8%26pid%3DApi&f=1&ipt=f7ab00687f96b1bf0d773164ba6b8099abf3d19ee384b5adead1be57b8da7bb6&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.AI0WOgR-dv2MWMIaJYQKTAHaEK%26pid%3DApi&f=1&ipt=f3c799c7e62fa09078ff6fbfcf199df298aacb479c7c92790e99fad22fefea39&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.-ips3-QLJzfbUTNurI-mIgHaGl%26pid%3DApi&f=1&ipt=4b7fec142f818b3cdce176d3d818552088a59b63274692520eb7e4ebced3f16b&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.aunfExJ_dMdEnbwg4t1uKAHaEp%26pid%3DApi&f=1&ipt=08550f0cc7c735c219fa7053d2c0337fc29b5205f149439aaf86b9a745763e1d&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.cunard.com%2Fcontent%2Fdam%2Fcunard%2Fmarketing-assets%2Fdestinations%2FTallin-750x563.jpg.image.1008.754.low.jpg&f=1&nofb=1&ipt=b0751bfbdd187b5be5999fc4566a9762d26ae8c11839360c04445e9f1dd40e91&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.2o4Yop0aCJFT2QxmIXRluAAAAA%26pid%3DApi&f=1&ipt=c57801fe217bde7b7ef41a543d7784cd630d587fa1117820ef2be1748077fba6&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.e0_vBylhy0bGJm_mlJflTAHaDp%26pid%3DApi&f=1&ipt=f21edb52c082f242dfba6b3dcffa0d46bd38a387b9ff438f235a8d5b5131f00d&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.QrqIj2TsaK8bHFiBjSxrfAHaDt%26pid%3DApi&f=1&ipt=2779fcfd5246f89d191ac3d5319984c4b248c5be9f22a12272650e800ea2ee89&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.explicit.bing.net%2Fth%3Fid%3DOIP.uj81mwITrs4pzvgjCgS5lwHaEM%26pid%3DApi&f=1&ipt=eecffcdae5d64f710baa601108c4d90c3cb5e8bf993dd5c8856f2a606c591cbc&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.xLPg3rxjI9I3lU-0HWGciAHaEK%26pid%3DApi&f=1&ipt=cdf04d4c6acb8b07d20272cb955344c797e46e88735186d7a85ec7480ed1d9d2&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.-xdlXIs3eA3IHgHYbf4nIAHaEK%26pid%3DApi&f=1&ipt=c24810de59699e7e4c05c3dfe8fc59f7cf8113b07d1b3da5cb6f378cb414f4f8&ipo=images", "https://cdn.discordapp.com/attachments/962647856177639424/1088829638983295046/nvmnd3-2782879698.jpg", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.XE384CDS-RjxBtNSev0-mgHaHa%26pid%3DApi&f=1&ipt=964bff6f2b240a86497c3e36878b29a71d57441154d81decf7563e777fd06004&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpreview.redd.it%2F24z21cp6x2751.png%3Fauto%3Dwebp%26s%3D61d5c3a266bc71e6aca081a06bc4c624711e16b7&f=1&nofb=1&ipt=6cf160f5b5e7277fb7070684a863c580a3292cf4f8d5737a637a504a71220c25&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.LUV5cRxLOOUbvY_OAfxEnwHaG-%26pid%3DApi&f=1&ipt=776b1bd555c8f5120a6b84acccdd5ccedc7f0a6e206ab9a537db8fc4f2d8d0db&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.explicit.bing.net%2Fth%3Fid%3DOIP.fB180_I3VVK5AXp_oDPivgHaE8%26pid%3DApi&f=1&ipt=f6af73aa6842f6a59fe688150291c25046a2d08fa3ec09646f73cb7db41411f5&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.BkeqOJem6cD1XOpOyDWtQAAAAA%26pid%3DApi&f=1&ipt=0a660d9e23a54dac937a8c7af76d296e830fa4a75c3968f38b17406c5c0ecb68&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.9u1pvBqHsQ6Vl9si77BdZQHaHa%26pid%3DApi&f=1&ipt=dd14d1a9ce501f495dac1e3c8ec8f60aa5ffd58545c898328fb705f567d84747&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.y3Z_65DjLwag-9OyrAecQwHaHa%26pid%3DApi&f=1&ipt=fc43bfd7460f4cbed3687fcc2cae051126f0deed941bab3eaf0857f2e761d28b&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.3dHGQWp0pknsu8vV8yMKsAHaKW%26pid%3DApi&f=1&ipt=8f0e39c5f1184d7d38c2043847fe05416006f9ee27b5e46b51e14e4698fa88fa&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.WEfoOPcY8Spq6Jm7JaLSGQHaE8%26pid%3DApi&f=1&ipt=8920caa9199adb83dca7dadc3fba38df2c7a64d24dedfb5d08a5a92a7e3a5d0c&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.W4YW6Q0J0bA-PP9_8BCndQHaHa%26pid%3DApi&f=1&ipt=48491478f3e8e22d14e8ce417e344483482325009bde3f4b46d8e23ef372fb1c&ipo=images", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.P-O-mypvtwiZ2bObQdirJAHaC_%26pid%3DApi&f=1&ipt=b105f3a8e400a14d8d3b008d79670c8a18ce0154c77dd5e8084c7b4d6ee77123&ipo=images"]
       var image = images[Math.floor(Math.random() * images.length)]
   document.body.style.backgroundImage = 'url(' + image + ')';
-  var words = ["valve software", "sponsored by durex", "ОПГ Тяп Ляп", "Avaleht", "Maja", "Pornhub", "Google.com", "Rutracker.org", "Blender.com", "Youtube", "Download KanYe West Graduation", "The cult of the Sun", "Nirvahna Org", "Jpegmafia", "League of Legends", "Dota 3", "Homestuck", "Denmark.gov", "Российский Государственный Сайт", "Jesus Jesus Japanesus", "E-Klasse", "Soma", "Uzdevumi", "Letonika", "Nirvhana 2023 Tour", "Defcon3 on jewish people - kanye", "2b2t | Home", "Alive 2027", "my name jeff", "Roblox 2", "(131) Graduation - Full Album (KanYe West 2007)" ]
+  var words = ["valve software", "sponsored by durex", "ОПГ Тяп Ляп", "Avaleht", "Maja", "Pornhub", "Google.com", "Rutracker.org", "Blender.com", "Youtube", "Download KanYe West Graduation", "The cult of the Sun", "Nirvahna Org", "Jpegmafia", "League of Legends", "Dota 3", "Homestuck", "Denmark.gov", "Российский Государственный Сайт", "Jesus Jesus Japanesus", "E-Klasse", "Soma", "Uzdevumi", "Letonika", "Nirvhana 2023 Tour", "Defcon3 on jewish people - kanye", "2b2t | Home", "Alive 2027", "my name jeff", "Roblox 2", "(131) Graduation - Full Album (KanYe West 2007)", "Stack Overflow" ]
   document.title = words[Math.floor(Math.random() * words.length)]
        }
    </script>
