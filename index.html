@@ -131,6 +131,9 @@ document.addEventListener("DOMContentLoaded", function() {
               
         }
         if (oT == "decode") {
+            if (output.value == "Expired code!") {
+                output.value = ""
+            }
             var binary = input.value
             binary = binary.substring(1)
             binary = binary.substring(0, binary.length - 1)
